@@ -17,9 +17,19 @@ public class NetworkedClient : MonoBehaviour
     bool isConnected = false;
     int ourClientID;
 
+    GameObject gameSystemManager;
+
     // Start is called before the first frame update
     void Start()
     {
+        GameObject[] allObjects = UnityEngine.Object.FindObjectsOfType<GameObject>();
+
+        foreach(GameObject go in allObjects)
+        {
+            if(go.GetComponent<SystemManager>() != null)
+                gameSystemManager = go;
+        }
+
         Connect();
     }
 
@@ -105,6 +115,27 @@ public class NetworkedClient : MonoBehaviour
     private void ProcessRecievedMsg(string msg, int id)
     {
         Debug.Log("msg recieved = " + msg + ".  connection id = " + id);
+
+        string[] csv = msg.Split(',');
+
+        int signifier = int.Parse(csv[0]);
+
+        if(signifier == ServerToClientSignifiers.AccountCreationComplete)
+        {
+            gameSystemManager.GetComponent<SystemManager>().ChangeState(GameStates.MainMenu);
+        }
+        else if (signifier == ServerToClientSignifiers.LoginComplete)
+        {
+            gameSystemManager.GetComponent<SystemManager>().ChangeState(GameStates.MainMenu);
+        }
+        else if (signifier == ServerToClientSignifiers.GameStart)
+        {
+            gameSystemManager.GetComponent<SystemManager>().ChangeState(GameStates.Game)
+        }
+        else if (signifier == ServerToClientSignifiers.OpponentPlayed)
+        {
+            Debug.Log("Opponent Played");
+        }
     }
 
     public bool IsConnected()
@@ -119,6 +150,10 @@ public static class ClientToServerSignifiers
     public const int CreateAccount = 1;
 
     public const int Login = 2;
+
+    public const int JoinQueueForGameRoom = 3;
+
+    public const int PlayGame = 4;
 }
 
 public static class ServerToClientSignifiers
@@ -130,6 +165,10 @@ public static class ServerToClientSignifiers
     public const int AccountCreationComplete = 3;
 
     public const int AccountCreationFailed = 4;
+
+    public const int OpponentPlayed = 5;
+
+    public const int GameStart = 6;
 }
 
 
