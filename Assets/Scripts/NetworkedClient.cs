@@ -215,14 +215,26 @@ public class NetworkedClient : MonoBehaviour
         else if (signifier == ServerToClientSignifiers.DisplayPlayer1Message)
         {
             string msg1 = csv[1];
-            gameSystemManager.GetComponent<SystemManager>().DisplayPlayer1Message(msg1);
+            StartCoroutine(gameSystemManager.GetComponent<SystemManager>().DisplayPlayer1Message(msg1));
         }
 
         //Player 2 Message Check
         else if (signifier == ServerToClientSignifiers.DisplayPlayer2Message)
         {
             string msg2 = csv[1];
-            gameSystemManager.GetComponent<SystemManager>().DisplayPlayer2Message(msg2);
+            StartCoroutine(gameSystemManager.GetComponent<SystemManager>().DisplayPlayer2Message(msg2));
+        }
+
+        else if (signifier == ServerToClientSignifiers.ReplayMove)
+        {
+            int playerID = int.Parse(csv[1]);
+            int nodeID = int.Parse(csv[2]);
+            StartCoroutine(gameSystemManager.GetComponent<SystemManager>().DisplayReplayMove(playerID, nodeID));
+        }
+
+        else if (signifier == ServerToClientSignifiers.JoinAsObserver)
+        {
+            gameSystemManager.GetComponent<SystemManager>().ChangeState(GameStates.Observer);
         }
 
     }
@@ -279,7 +291,7 @@ public static class ServerToClientSignifiers
 
     public const int JoinAsObserver = 12;
 
-
+    public const int ReplayMove = 13;
 }
 
 

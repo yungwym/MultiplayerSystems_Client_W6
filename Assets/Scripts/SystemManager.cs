@@ -36,6 +36,9 @@ public class SystemManager : MonoBehaviour
     GameObject replayButton;
     GameObject quitButton;
 
+    GameObject replayBlock;
+    GameObject replayText;
+
     //HUD Panel
     GameObject hudPanel;
     GameObject player1Panel;
@@ -55,6 +58,8 @@ public class SystemManager : MonoBehaviour
 
     GameObject player1MsgText;
     GameObject player2MsgText;
+
+
     
     //Member Variables 
     GameObject networkedClient;
@@ -115,7 +120,7 @@ public class SystemManager : MonoBehaviour
 
     public void ReplayButtonPressed()
     {
-        Debug.Log("ReplayButton");
+        networkedClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.RequestReplayMove + "");
     }
 
     public void QuitButtonPressed()
@@ -182,6 +187,15 @@ public class SystemManager : MonoBehaviour
         player2MsgText.SetActive(false);
     }
 
+    public IEnumerator DisplayReplayMove(int playerID, int nodeID)
+    {
+        replayBlock.SetActive(true);
+        replayText.SetActive(true);
+        replayText.GetComponent<Text>().text = "Player: " + playerID + " placed tile at: " + nodeID;
+        yield return new WaitForSeconds(5.0f);
+        replayBlock.SetActive(false);
+        replayText.SetActive(false);
+    }
 
     public void DisplayEndScreen(int endCondition)
     {
@@ -222,6 +236,12 @@ public class SystemManager : MonoBehaviour
         endGamePanel.SetActive(false);
         hudPanel.SetActive(false);
 
+        player1MsgBlock.SetActive(false);
+        player1MsgText.SetActive(false);
+
+        player2MsgBlock.SetActive(false);
+        player2MsgText.SetActive(false);
+
         if (newState == GameStates.LoginMenu)
         {
             basePanel.SetActive(true);
@@ -242,6 +262,11 @@ public class SystemManager : MonoBehaviour
             gameboard.SetActive(true);
             hudPanel.SetActive(true);
         }
+        else if (newState == GameStates.Observer)
+        {
+            gameboard.SetActive(true);
+            gameboard.GetComponent<Gameboard>().IsObersever = true;
+        }
         else if (newState == GameStates.WinGame)
         {
             DisplayEndScreen(1);
@@ -250,7 +275,7 @@ public class SystemManager : MonoBehaviour
         {
             DisplayEndScreen(0);
         }
-        else if(newState == GameStates.Observer)
+        else if(newState == GameStates.ObserverEnd)
         {
             DisplayEndScreen(3);
         }
@@ -308,6 +333,11 @@ public class SystemManager : MonoBehaviour
             else if (go.name == "QuitButton")
                 quitButton = go;
 
+            else if (go.name == "ReplayBlock")
+                replayBlock = go;
+            else if (go.name == "ReplayText")
+                replayText = go;
+
             //Get HUD Panel
             else if (go.name == "HUDPanel")
                 hudPanel = go;
@@ -335,8 +365,14 @@ public class SystemManager : MonoBehaviour
                 customMsgSendButton = go;
 
             //Message Log
-
-
+            else if (go.name == "Player1Block")
+                player1MsgBlock = go;
+            else if (go.name == "Player2Block")
+                player2MsgBlock = go;
+            else if (go.name == "Player1Text")
+                player1MsgText = go;
+            else if (go.name == "Player2Text")
+                player2MsgText = go;
 
 
             //Opponent Panel
@@ -392,4 +428,6 @@ public static class GameStates
     public const int EndGameObserver = 7;
 
     public const int Observer = 8;
+
+    public const int ObserverEnd = 9;
 }
