@@ -192,11 +192,13 @@ public class NetworkedClient : MonoBehaviour
                 case 0:
                     //Game Lose
                     Debug.Log("Game Lose");
+                    gameSystemManager.GetComponent<SystemManager>().ChangeState(GameStates.LoseGame);
                     break;
 
                 case 1:
                     //Game Win
                     Debug.Log("Game Win");
+                    gameSystemManager.GetComponent<SystemManager>().ChangeState(GameStates.WinGame);
                     break;
 
                 case 3:

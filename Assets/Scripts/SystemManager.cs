@@ -33,6 +33,8 @@ public class SystemManager : MonoBehaviour
     //End Game Panel
     GameObject endGamePanel;
     GameObject gameResultText;
+    GameObject replayButton;
+    GameObject quitButton;
 
     //HUD Panel
     GameObject hudPanel;
@@ -111,6 +113,16 @@ public class SystemManager : MonoBehaviour
         ChangeState(GameStates.WaitingInQueueForOtherPlayers);
     }
 
+    public void ReplayButtonPressed()
+    {
+        Debug.Log("ReplayButton");
+    }
+
+    public void QuitButtonPressed()
+    {
+        Application.Quit();
+    }
+
 
     //Messaging Functions 
     public void SendPrefixed1()
@@ -151,6 +163,34 @@ public class SystemManager : MonoBehaviour
     }
 
 
+    public void DisplayEndScreen(int endCondition)
+    {
+        endGamePanel.SetActive(true);
+
+
+        switch (endCondition)
+        {
+            //Player Lose
+            case 0:
+                endGamePanel.GetComponent<Image>().color = Color.red;
+                gameResultText.GetComponent<Text>().text = "You Have Lost!";
+                break;
+
+            //Player Win
+            case 1:
+                endGamePanel.GetComponent<Image>().color = Color.blue;
+                gameResultText.GetComponent<Text>().text = "You Have Won!";
+                break;
+            //Observer End
+            case 3:
+
+                break;
+
+            default:
+                break;
+        }
+    }
+
 
     //Game States and Game UI
     public void ChangeState(int newState)
@@ -181,18 +221,19 @@ public class SystemManager : MonoBehaviour
         else if (newState == GameStates.Game)
         {
             gameboard.SetActive(true);
+            hudPanel.SetActive(true);
         }
-        else if (newState == GameStates.GameWin)
+        else if (newState == GameStates.WinGame)
         {
-
+            DisplayEndScreen(1);
         }
-        else if (newState == GameStates.GameLose)
+        else if (newState == GameStates.LoseGame)
         {
-
+            DisplayEndScreen(0);
         }
         else if(newState == GameStates.Observer)
         {
-
+            DisplayEndScreen(3);
         }
     }
 
@@ -243,7 +284,10 @@ public class SystemManager : MonoBehaviour
                 endGamePanel = go;
             else if (go.name == "ResultText")
                 gameResultText = go;
-
+            else if (go.name == "ReplayButton")
+                replayButton = go;
+            else if (go.name == "QuitButton")
+                quitButton = go;
 
             //Get HUD Panel
             else if (go.name == "HUDPanel")
@@ -287,7 +331,6 @@ public class SystemManager : MonoBehaviour
           
         }
 
-
         //Login Buttons and Toggle Setup
         submitButton.GetComponent<Button>().onClick.AddListener(SubmitButtonPressed);
         joinGameRoomButton.GetComponent<Button>().onClick.AddListener(JoinGameRoomButtonPressed);
@@ -302,6 +345,9 @@ public class SystemManager : MonoBehaviour
         prefixedMsg4.GetComponent<Button>().onClick.AddListener(SendPrefixed4);
         customMsgSendButton.GetComponent<Button>().onClick.AddListener(SendCustomMsg);
 
+        replayButton.GetComponent<Button>().onClick.AddListener(ReplayButtonPressed);
+        quitButton.GetComponent<Button>().onClick.AddListener(QuitButtonPressed);
+
         //Set beginning Game State
         ChangeState(GameStates.LoginMenu);
     }
@@ -310,7 +356,6 @@ public class SystemManager : MonoBehaviour
 
 
 //Game States Class 
-
 public static class GameStates
 {
     public const int LoginMenu = 1;
@@ -321,10 +366,11 @@ public static class GameStates
 
     public const int Game = 4;
 
-    public const int GameWin = 5;
+    public const int WinGame = 5;
 
-    public const int GameLose = 6;
+    public const int LoseGame = 6;
 
-    public const int Observer = 7;
+    public const int EndGameObserver = 7;
 
+    public const int Observer = 8;
 }
