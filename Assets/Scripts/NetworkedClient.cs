@@ -211,7 +211,19 @@ public class NetworkedClient : MonoBehaviour
             } 
         }
 
-         
+        //Player 1 Message Check
+        else if (signifier == ServerToClientSignifiers.DisplayPlayer1Message)
+        {
+            string msg1 = csv[1];
+            gameSystemManager.GetComponent<SystemManager>().DisplayPlayer1Message(msg1);
+        }
+
+        //Player 2 Message Check
+        else if (signifier == ServerToClientSignifiers.DisplayPlayer2Message)
+        {
+            string msg2 = csv[1];
+            gameSystemManager.GetComponent<SystemManager>().DisplayPlayer2Message(msg2);
+        }
 
     }
 

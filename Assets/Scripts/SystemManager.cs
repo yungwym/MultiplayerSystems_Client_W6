@@ -162,11 +162,30 @@ public class SystemManager : MonoBehaviour
         Debug.Log(msg);
     }
 
+    public IEnumerator DisplayPlayer1Message(string msg)
+    {
+        player1MsgBlock.SetActive(true);
+        player1MsgText.SetActive(true);
+        player1MsgText.GetComponent<Text>().text = msg;
+        yield return new WaitForSeconds(5.0f);
+        player1MsgBlock.SetActive(false);
+        player1MsgText.SetActive(false);
+    }
+
+    public IEnumerator DisplayPlayer2Message(string msg)
+    {
+        player2MsgBlock.SetActive(true);
+        player2MsgText.SetActive(true);
+        player2MsgText.GetComponent<Text>().text = msg;
+        yield return new WaitForSeconds(5.0f);
+        player2MsgBlock.SetActive(false);
+        player2MsgText.SetActive(false);
+    }
+
 
     public void DisplayEndScreen(int endCondition)
     {
         endGamePanel.SetActive(true);
-
 
         switch (endCondition)
         {
