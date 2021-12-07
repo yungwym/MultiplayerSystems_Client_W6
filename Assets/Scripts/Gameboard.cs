@@ -51,15 +51,20 @@ public class Gameboard : MonoBehaviour
     public void SetPlayerNumber(int playerNumber)
     {
         if (playerNumber == 1)
+        {
             thisPlayersMark = Player1Mark;
+            IsThisPlayersTurn = true;
+        }
         else if (playerNumber == 2)
+        {
             thisPlayersMark = Player2Mark;
+        }
     }
 
     public void SelectPlayerNode(int nodeID)
     {
         //Send Selected Node and PlayerMark to the Server
-        networkedClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.TurnTaken + "," + nodeID);
+        networkedClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.TurnTaken + "," + (int)thisPlayersMark + "," + nodeID);
         IsThisPlayersTurn = false;
     }
 
@@ -77,6 +82,8 @@ public class Gameboard : MonoBehaviour
             //This Player has won
 
             Debug.Log("Player Win!");
+
+            networkedClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.PlayerWin + "");
         }
     }
 

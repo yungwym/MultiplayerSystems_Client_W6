@@ -17,7 +17,10 @@ public class NetworkedClient : MonoBehaviour
     bool isConnected = false;
     int ourClientID;
 
+    //Game Object Variables 
     GameObject gameSystemManager;
+    [SerializeField] private GameObject gameboard;
+
 
     // Start is called before the first frame update
     void Start()
@@ -26,19 +29,15 @@ public class NetworkedClient : MonoBehaviour
 
         foreach(GameObject go in allObjects)
         {
-            if(go.GetComponent<SystemManager>() != null)
-                gameSystemManager = go;
+            if (go.name == "SystemManager")
+                gameSystemManager = go;     
         }
-
-        Connect();
+            Connect();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.S))
-            SendMessageToHost("Hello from client");
-
         UpdateNetworkConnection();
     }
 
@@ -96,7 +95,6 @@ public class NetworkedClient : MonoBehaviour
                 isConnected = true;
 
                 Debug.Log("Connected, id = " + connectionID);
-
             }
         }
     }
@@ -139,8 +137,80 @@ public class NetworkedClient : MonoBehaviour
         else if (signifier == ServerToClientSignifiers.GameStart)
         {
             gameSystemManager.GetComponent<SystemManager>().ChangeState(GameStates.Game);
+
+            SendMessageToHost(ClientToServerSignifiers.PlayGame + "");
         }
-      
+
+        
+        //Set Player Number Check
+        else if (signifier == ServerToClientSignifiers.SetPlayerNumber)
+        {
+            int playerNum = int.Parse(csv[1]);
+
+            Debug.Log("Player Num: " + playerNum);
+
+            gameboard.GetComponent<Gameboard>().SetPlayerNumber(playerNum);
+        }
+
+        //Players Turn Check
+        else if (signifier == ServerToClientSignifiers.PlayersTurn)
+        {
+            gameboard.GetComponent<Gameboard>().IsThisPlayersTurn = true;
+        }
+
+        //Update Gameboard Check
+        else if (signifier == ServerToClientSignifiers.UpdateGameboard)
+        {
+            int nodeM = int.Parse(csv[1]);
+            int nodeIndex = int.Parse(csv[2]);
+            Mark mark;
+
+            switch (nodeM)
+            {
+                case 1:
+                    mark = Mark.X;
+                    break;
+
+                case 2:
+                    mark = Mark.O;
+                    break;
+
+                default:
+                    mark = Mark.NONE;
+                    break;
+            }
+            gameboard.GetComponent<Gameboard>().UpdateGameBoard(mark, nodeIndex);
+        }
+
+        //Game End Check 
+        else if (signifier == ServerToClientSignifiers.EndGame)
+        {
+            int endGameCondition = int.Parse(csv[1]);
+
+            switch (endGameCondition)
+            {
+                case 0:
+                    //Game Lose
+                    Debug.Log("Game Lose");
+                    break;
+
+                case 1:
+                    //Game Win
+                    Debug.Log("Game Win");
+                    break;
+
+                case 3:
+                    //Observer
+                    Debug.Log("Game Over for Observer");
+                    break;
+
+                default:
+                    break;
+            } 
+        }
+
+         
+
     }
 
     public bool IsConnected()
@@ -162,7 +232,11 @@ public static class ClientToServerSignifiers
 
     public const int TurnTaken = 5;
 
-    
+    public const int PlayerWin = 6;
+
+    public const int PlayerMessage = 7;
+
+    public const int RequestReplayMove = 8; 
 }
 
 public static class ServerToClientSignifiers
@@ -176,6 +250,22 @@ public static class ServerToClientSignifiers
     public const int AccountCreationFailed = 4;
 
     public const int GameStart = 5;
+
+    public const int SetPlayerNumber = 6;
+
+    public const int PlayersTurn = 7;
+
+    public const int UpdateGameboard = 8;
+
+    public const int EndGame = 9;
+
+    public const int DisplayPlayer1Message = 10;
+
+    public const int DisplayPlayer2Message = 11;
+
+    public const int JoinAsObserver = 12;
+
+
 }
 
 

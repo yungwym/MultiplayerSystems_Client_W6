@@ -31,7 +31,7 @@ public class Node : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (gameboard.IsPlayer1sTurn && gameboard.IsObersever == false)
+        if (gameboard.IsThisPlayersTurn && gameboard.IsObersever == false)
         {
             CheckForInput();
         }
@@ -39,14 +39,16 @@ public class Node : MonoBehaviour
 
     private void CheckForInput()
     {
+       
+
         if (Input.GetMouseButtonDown(0))
         {
             Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Vector2 mousePos = new Vector2(mousePosition.x, mousePosition.y);
 
             if (collider.bounds.Contains(mousePos) && isOccupied == false)
-            {    
-                
+            {
+                Debug.Log("Input");
                 //Send Selected Node to Gameboard
                 gameboard.SelectPlayerNode(nodeID);
                 isOccupied = true;

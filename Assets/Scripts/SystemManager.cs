@@ -182,8 +182,19 @@ public class SystemManager : MonoBehaviour
         {
             gameboard.SetActive(true);
         }
-    }
+        else if (newState == GameStates.GameWin)
+        {
 
+        }
+        else if (newState == GameStates.GameLose)
+        {
+
+        }
+        else if(newState == GameStates.Observer)
+        {
+
+        }
+    }
 
     private void SetupUserInterface()
     {
@@ -224,7 +235,7 @@ public class SystemManager : MonoBehaviour
                 waitingPanel = go;
 
             //Get Gameboard Elements 
-            else if (go.name == "Gameboard")
+            else if (go.name == "GameBoard")
                 gameboard = go;
 
             //Get EndGame Panel Elements 
