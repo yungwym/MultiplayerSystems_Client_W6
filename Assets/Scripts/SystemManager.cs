@@ -216,7 +216,8 @@ public class SystemManager : MonoBehaviour
                 break;
             //Observer End
             case 3:
-
+                endGamePanel.GetComponent<Image>().color = Color.yellow;
+                gameResultText.GetComponent<Text>().text = "Game Over!";
                 break;
 
             default:

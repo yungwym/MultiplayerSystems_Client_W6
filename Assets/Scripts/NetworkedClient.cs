@@ -204,6 +204,7 @@ public class NetworkedClient : MonoBehaviour
                 case 3:
                     //Observer
                     Debug.Log("Game Over for Observer");
+                    gameSystemManager.GetComponent<SystemManager>().ChangeState(GameStates.ObserverEnd);
                     break;
 
                 default:
