@@ -59,11 +59,8 @@ public class SystemManager : MonoBehaviour
     GameObject player1MsgText;
     GameObject player2MsgText;
 
-
-    
     //Member Variables 
     GameObject networkedClient;
-
 
     // Start is called before the first frame update
     void Start()
@@ -71,15 +68,6 @@ public class SystemManager : MonoBehaviour
         SetupUserInterface();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
-
-
-   
     //Login and Create Account Functions 
     public void LoginTogglePressed(bool newValue)
     {
@@ -97,7 +85,6 @@ public class SystemManager : MonoBehaviour
 
         string user = usernameInput.GetComponent<InputField>().text;
         string pass = passwordInput.GetComponent<InputField>().text;
-
         string msg;
 
         if (createToggle.GetComponent<Toggle>().isOn)
@@ -106,9 +93,7 @@ public class SystemManager : MonoBehaviour
         else
             msg = ClientToServerSignifiers.Login + "," + user + "," + pass;
 
-
         networkedClient.GetComponent<NetworkedClient>().SendMessageToHost(msg);
-
         Debug.Log(msg);
     }
 
@@ -383,8 +368,6 @@ public class SystemManager : MonoBehaviour
             //Get Networked Client 
             else if (go.name == "NetworkedClient")
                 networkedClient = go;
-          
-          
         }
 
         //Login Buttons and Toggle Setup

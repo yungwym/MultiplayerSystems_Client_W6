@@ -6,7 +6,6 @@ using UnityEngine.Networking;
 
 public class NetworkedClient : MonoBehaviour
 {
-
     int connectionID;
     int maxConnections = 1000;
     int reliableChannelID;
@@ -133,7 +132,6 @@ public class NetworkedClient : MonoBehaviour
         //
         // Game Start, Turns and Win/Lose 
         //
-
         else if (signifier == ServerToClientSignifiers.GameStart)
         {
             gameSystemManager.GetComponent<SystemManager>().ChangeState(GameStates.Game);

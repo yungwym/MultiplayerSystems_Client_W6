@@ -39,8 +39,6 @@ public class Node : MonoBehaviour
 
     private void CheckForInput()
     {
-       
-
         if (Input.GetMouseButtonDown(0))
         {
             Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -56,7 +54,6 @@ public class Node : MonoBehaviour
         }
     }
 
-    
     public void UpdateNode(Mark recieversNode)
     {
         switch (recieversNode)
@@ -87,5 +84,4 @@ public class Node : MonoBehaviour
         spriteRenderer.sprite = gameboard.oSprite;
         isOccupied = true;
     }
-
 }

@@ -71,8 +71,8 @@ public class Gameboard : MonoBehaviour
 
     public void UpdateGameBoard(Mark nodeMark, int nodeIndex)
     {
+        //Place Updated Node
         nodes[nodeIndex].UpdateNode(nodeMark);
-
 
         //After updating the gameboard, check for win
         bool hasWon = CheckForWin();
@@ -80,13 +80,10 @@ public class Gameboard : MonoBehaviour
         if (hasWon)
         {
             //This Player has won
-
             Debug.Log("Player Win!");
-
             networkedClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.PlayerWin + "");
         }
     }
-
 
     private void GetNetworkedClient()
     {
@@ -100,15 +97,9 @@ public class Gameboard : MonoBehaviour
         }
     }
 
-
-
-
-
-
     //
     // Game Win Condition Check
-    //
-    
+    //    
     //Check for all possbile win conditions 
     public bool CheckForWin()
     {
@@ -127,5 +118,4 @@ public class Gameboard : MonoBehaviour
         bool isMatched = (nodes[i].NodeMark == m && nodes[j].NodeMark == m && nodes[k].NodeMark == m);
         return isMatched;
     }
-    
 }
